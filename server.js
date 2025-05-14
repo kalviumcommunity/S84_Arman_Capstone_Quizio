@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-
 app.use(express.json());
 
 
@@ -65,6 +64,18 @@ app.put('/api/doubts/:id', (req, res) => {
     updatedDoubt: sampleDoubts[doubtIndex]
   });
 });
+
+// Connect to MongoDB
+const mongoose = require('mongoose');
+const Doubt = require('./models/Doubt');
+
+mongoose.connect('mongodb://127.0.0.1:27017/quizio', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected!'))
+.catch((err) => console.log('MongoDB connection error:', err));
+
 
 
 app.listen(PORT, () => {
