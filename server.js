@@ -40,6 +40,33 @@ app.post('/api/doubts', (req, res) => {
 });
 
 
+app.put('/api/doubts/:id', (req, res) => {
+  const { id } = req.params;
+  const { question, askedBy } = req.body;
+
+  let sampleDoubts = [
+    { id: 1, question: "What is React?", askedBy: "Alice" },
+    { id: 2, question: "Explain closures in JavaScript", askedBy: "Bob" },
+  ];
+
+  const doubtIndex = sampleDoubts.findIndex(doubt => doubt.id == id);
+
+  if (doubtIndex === -1) {
+    return res.status(404).json({ message: 'Doubt not found' });
+  }
+
+  if (question) sampleDoubts[doubtIndex].question = question;
+  if (askedBy) sampleDoubts[doubtIndex].askedBy = askedBy;
+
+  console.log(`Doubt with ID ${id} updated:`, sampleDoubts[doubtIndex]);
+
+  res.json({
+    message: 'Doubt updated successfully',
+    updatedDoubt: sampleDoubts[doubtIndex]
+  });
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
