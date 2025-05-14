@@ -1,7 +1,9 @@
 const express = require('express');
+const Doubt = require('./models/Doubt');
+
+
 const app = express();
 const PORT = 3000;
-
 
 app.use(express.json());
 
@@ -65,6 +67,7 @@ app.put('/api/doubts/:id', (req, res) => {
     updatedDoubt: sampleDoubts[doubtIndex]
   });
 });
+
 
 
 app.listen(PORT, () => {
