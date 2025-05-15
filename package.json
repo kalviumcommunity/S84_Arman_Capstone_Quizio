@@ -1,0 +1,12 @@
+{
+  "name": "s84_arman_capstone_quizio",
+  "version": "1.0.0",
+  "description": "**Quizio – A Peer-to-Peer Academic Doubt-Solving Platform**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
