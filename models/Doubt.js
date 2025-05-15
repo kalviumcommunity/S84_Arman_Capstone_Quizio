@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 
 const doubtSchema = new mongoose.Schema({
-  question: { type: String, required: true },
-  askedBy: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  question: String,
+  mediaUrl: String,
+  askedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', 
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
-const Doubt = mongoose.model('Doubt', doubtSchema);
-
-module.exports = Doubt;
-
+module.exports = mongoose.model('Doubt', doubtSchema);
