@@ -1,6 +1,6 @@
 const express = require('express');
 const Doubt = require('./models/Doubt');
-
+const mongoose = require('mongoose');
 
 const app = express();
 const PORT = 3000;
@@ -13,33 +13,33 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/api/doubts', (req, res) => {
-  const sampleDoubts = [
-    { id: 1, question: "What is React?", askedBy: "Alice" },
-    { id: 2, question: "Explain closures in JavaScript", askedBy: "Bob" },
-  ];
-  res.json({ doubts: sampleDoubts });
-});
-
-
-app.post('/api/doubts', (req, res) => {
-  const { question, askedBy } = req.body;
-
-  if (!question || !askedBy) {
-    return res.status(400).send({ message: 'Question and askedBy are required fields.' });
+app.get('/api/doubts', async (req, res) => {
+  try {
+    const doubts = await Doubt.find();
+    res.json({ doubts });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch doubts.' });
   }
-
-  const newDoubt = {
-    id: Math.floor(Math.random() * 1000), 
-    question,
-    askedBy
-  };
-
-  
-  console.log('New doubt submitted:', newDoubt);
-
-  res.status(201).json({ message: 'Doubt created successfully!', doubt: newDoubt });
 });
+
+
+
+app.post('/api/doubts', async (req, res) => {
+  const { question, mediaUrl } = req.body;
+
+  try {
+    const newDoubt = new Doubt({
+      question,
+      mediaUrl
+    });
+
+    await newDoubt.save();
+    res.status(201).json({ message: "Doubt saved!", doubt: newDoubt });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to save doubt." });
+  }
+});
+
 
 
 app.put('/api/doubts/:id', (req, res) => {
@@ -68,7 +68,12 @@ app.put('/api/doubts/:id', (req, res) => {
   });
 });
 
-
+mongoose.connect("mongodb+srv://arman:arman@cluster.hav342r.mongodb.net/?retryWrites=true&w=majority&appName=cluster")
+.then(() => {
+  console.log('MongoDB connected');
+}).catch(err => {
+  console.log('MongoDB connection error:', err);
+});
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
